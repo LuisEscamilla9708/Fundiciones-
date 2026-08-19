@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de productos | Fundiciones San Pablo</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Roboto+Slab:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="catalogo.css">
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="nav-wrap">
+
+        <a class="brand" href="index.html">
+            <span class="brand-icon">⌂</span>
+            <span>Fundiciones San Pablo</span>
+        </a>
+
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="#catalogo">Productos</a>
+            <a href="index.html#contacto">Contacto</a>
+            <a href="index.html#ubicacion">Ubicación</a>
+        </nav>
+
+        <a class="nav-cta" href="index.html#contacto">
+            Cotiza ahora
+        </a>
+
+    </div>
+</header>
+
+
+<!-- PORTADA DEL CATÁLOGO -->
+<section class="catalog-hero">
+    <div class="container">
+
+        <p class="eyebrow">
+            CATÁLOGO DE PRODUCTOS
+        </p>
+
+        <h1>
+            Encuentra rápidamente la pieza que necesitas
+        </h1>
+
+        <p class="intro">
+            Busca por nombre, tipo o medida. Cuando encuentres la pieza,
+            puedes solicitar su cotización directamente por WhatsApp.
+        </p>
+
+        <div class="search-wrap">
+            <span class="search-icon">⌕</span>
+
+            <input
+                id="searchInput"
+                type="search"
+                placeholder='Ej. Codo 90°, Tee reductora, 6" × 4"...'
+                autocomplete="off"
+            >
+
+            <button id="clearSearch" type="button">
+                Limpiar
+            </button>
+        </div>
+
+        <div id="quickNav" class="quick-nav"></div>
+
+        <p id="resultCount" class="result-count"></p>
+
+    </div>
+</section>
+
+
+<!-- CATÁLOGO -->
+<main id="catalogo" class="catalog-main">
+
+    <div class="container">
+
+        <div id="catalogContainer"></div>
+
+        <div id="noResults" class="no-results" hidden>
+
+            <h3>
+                No encontramos coincidencias
+            </h3>
+
+            <p>
+                Prueba con otra medida o con palabras como
+                “codo”, “tee”, “brida”, “válvula” o “rejilla”.
+            </p>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer class="site-footer">
+
+    <div class="container footer-inner">
+
+        <div>
+
+            <strong>
+                Fundiciones San Pablo
+            </strong>
+
+            <p>
+                Soluciones en hierro fundido para infraestructura
+                hidráulica y alcantarillado.
+            </p>
+
+        </div>
+
+        <a href="index.html">
+            Regresar al inicio
+        </a>
+
+    </div>
+
+</footer>
+
+
+<script>
+
+/* =========================================================
+   WHATSAPP
+
+   CAMBIA ESTE NÚMERO POR EL REAL DE LA EMPRESA
+
+   Ejemplo:
+   55 1234 5678
+
+   Se escribe:
+   525512345678
+========================================================= */
+
+const WHATSAPP_NUMBER = "5210000000000";
+
+
+/* =========================================================
+   CATÁLOGO
+
+   SOLO NOMBRES Y MEDIDAS.
+   LOS CÓDIGOS INTERNOS NO APARECEN.
+========================================================= */
+
+const catalogData = {
+
+    "Conexiones": {
+
+        "Bridas": [
+            "Brida de 2\"",
+            "Brida de 2 1/2\"",
+            "Brida de 3\"",
+            "Brida de 4\"",
+            "Brida de 6\"",
+            "Brida de 8\"",
+            "Brida de 10\"",
+            "Brida de 12\"",
+            "Brida de 14\"",
+            "Brida de 16\"",
+            "Brida de 18\"",
+            "Brida de 20\"",
+            "Brida de 24\"",
+            "Brida de 30\"",
+            "Brida de 36\""
+        ],
+
+
+        "Codos de 90°": [
+            "Codo de 90° de 2\"",
+            "Codo de 90° de 2 1/2\"",
+            "Codo de 90° de 3\"",
+            "Codo de 90° de 4\"",
+            "Codo de 90° de 6\"",
+            "Codo de 90° de 8\"",
+            "Codo de 90° de 10\"",
+            "Codo de 90° de 12\"",
+            "Codo de 90° de 14\"",
+            "Codo de 90° de 16\"",
+            "Codo de 90° de 18\"",
+            "Codo de 90° de 20\"",
+            "Codo de 90° de 24\"",
+            "Codo de 90° de 30\"",
+            "Codo de 90° de 36\""
+        ],
+
+
+        "Codos de 45°": [
+            "Codo de 45° de 2\"",
+            "Codo de 45° de 2 1/2\"",
+            "Codo de 45° de 3\"",
+            "Codo de 45° de 4\"",
+            "Codo de 45° de 6\"",
+            "Codo de 45° de 8\"",
+            "Codo de 45° de 10\"",
+            "Codo de 45° de 12\"",
+            "Codo de 45° de 14\"",
+            "Codo de 45° de 16\"",
+            "Codo de 45° de 18\"",
+            "Codo de 45° de 20\"",
+            "Codo de 45° de 24\"",
+            "Codo de 45° de 30\"",
+            "Codo de 45° de 36\""
+        ],
+
+
+        "Codos de 22°30'": [
+            "Codo de 22°30' de 2\"",
+            "Codo de 22°30' de 2 1/2\"",
+            "Codo de 22°30' de 3\"",
+            "Codo de 22°30' de 4\"",
+            "Codo de 22°30' de 6\"",
+            "Codo de 22°30' de 8\"",
+            "Codo de 22°30' de 10\"",
+            "Codo de 22°30' de 12\"",
+            "Codo de 22°30' de 14\"",
+            "Codo de 22°30' de 16\"",
+            "Codo de 22°30' de 18\"",
+            "Codo de 22°30' de 20\"",
+            "Codo de 22°30' de 24\"",
+            "Codo de 22°30' de 30\"",
+            "Codo de 22°30' de 36\""
+        ],
+
+
+        "Codos de 11°15'": [
+            "Codo de 11°15' de 2\"",
+            "Codo de 11°15' de 2 1/2\"",
+            "Codo de 11°15' de 3\"",
+            "Codo de 11°15' de 4\"",
+            "Codo de 11°15' de 6\"",
+            "Codo de 11°15' de 8\"",
+            "Codo de 11°15' de 10\"",
+            "Codo de 11°15' de 12\"",
+            "Codo de 11°15' de 14\"",
+            "Codo de 11°15' de 16\"",
+            "Codo de 11°15' de 18\"",
+            "Codo de 11°15' de 20\"",
+            "Codo de 11°15' de 24\"",
+            "Codo de 11°15' de 30\"",
+            "Codo de 11°15' de 36\""
+        ],
+
+
+        "Tees rectas": [
+            "Tee recta de 2\" × 2\"",
+            "Tee recta de 2 1/2\" × 2 1/2\"",
+            "Tee recta de 3\" × 3\"",
+            "Tee recta de 4\" × 4\"",
+            "Tee recta de 6\" × 6\"",
+            "Tee recta de 8\" × 8\"",
+            "Tee recta de 10\" × 10\"",
+            "Tee recta de 12\" × 12\"",
+            "Tee recta de 14\" × 14\"",
+            "Tee recta de 16\" × 16\"",
+            "Tee recta de 18\" × 18\"",
+            "Tee recta de 20\" × 20\"",
+            "Tee recta de 24\" × 24\"",
+            "Tee recta de 30\" × 30\"",
+            "Tee recta de 36\" × 36\""
+        ],
+
+
+        "Tees reductoras": [
+            "Tee reductora de 2 1/2\" × 2\"",
+            "Tee reductora de 3\" × 2\"",
+            "Tee reductora de 3\" × 2 1/2\"",
+            "Tee reductora de 4\" × 2\"",
+            "Tee reductora de 4\" × 2 1/2\"",
+            "Tee reductora de 4\" × 3\"",
+            "Tee reductora de 6\" × 2\"",
+            "Tee reductora de 6\" × 2 1/2\"",
+            "Tee reductora de 6\" × 3\"",
+            "Tee reductora de 6\" × 4\"",
+            "Tee reductora de 8\" × 2\"",
+            "Tee reductora de 8\" × 2 1/2\"",
+            "Tee reductora de 8\" × 3\"",
+            "Tee reductora de 8\" × 4\"",
+            "Tee reductora de 8\" × 6\"",
+            "Tee reductora de 10\" × 2\"",
+            "Tee reductora de 10\" × 2 1/2\"",
+            "Tee reductora de 10\" × 3\"",
+            "Tee reductora de 10\" × 4\"",
+            "Tee reductora de 10\" × 6\"",
+            "Tee reductora de 10\" × 8\"",
+            "Tee reductora de 12\" × 3\"",
+            "Tee reductora de 12\" × 4\"",
+            "Tee reductora de 12\" × 6\"",
+            "Tee reductora de 12\" × 8\"",
+            "Tee reductora de 12\" × 10\"",
+            "Tee reductora de 14\" × 3\"",
+            "Tee reductora de 14\" × 4\"",
+            "Tee reductora de 14\" × 6\"",
+            "Tee reductora de 14\" × 8\"",
+            "Tee reductora de 14\" × 10\"",
+            "Tee reductora de 14\" × 12\"",
+            "Tee reductora de 16\" × 4\"",
+            "Tee reductora de 16\" × 6\"",
+            "Tee reductora de 16\" × 8\"",
+            "Tee reductora de 16\" × 10\"",
+            "Tee reductora de 16\" × 12\"",
+            "Tee reductora de 18\" × 14\"",
+            "Tee reductora de 18\" × 4\"",
+            "Tee reductora de 18\" × 6\"",
+            "Tee reductora de 18\" × 8\"",
+            "Tee reductora de 18\" × 10\"",
+            "Tee reductora de 18\" × 12\"",
+            "Tee reductora de 18\" × 16\"",
+            "Tee reductora de 20\" × 4\"",
+            "Tee reductora de 20\" × 6\"",
+            "Tee reductora de 20\" × 8\"",
+            "Tee reductora de 20\" × 10\"",
+            "Tee reductora de 20\" × 12\"",
+            "Tee reductora de 20\" × 14\"",
+            "Tee reductora de 20\" × 16\"",
+            "Tee reductora de 20\" × 18\"",
+            "Tee reductora de 24\" × 4\"",
+            "Tee reductora de 24\" × 6\"",
+            "Tee reductora de 24\" × 8\"",
+            "Tee reductora de 24\" × 10\"",
+            "Tee reductora de 24\" × 12\"",
+            "Tee reductora de 24\" × 14\"",
+            "Tee reductora de 24\" × 16\"",
+            "Tee reductora de 24\" × 18\"",
+            "Tee reductora de 24\" × 20\"",
+            "Tee reductora de 30\" × 4\"",
+            "Tee reductora de 30\" × 6\"",
+            "Tee reductora de 30\" × 8\"",
+            "Tee reductora de 30\" × 10\"",
+            "Tee reductora de 30\" × 12\"",
+            "Tee reductora de 30\" × 14\"",
+            "Tee reductora de 30\" × 16\"",
+            "Tee reductora de 30\" × 18\"",
+            "Tee reductora de 30\" × 20\"",
+            "Tee reductora de 30\" × 24\"",
+            "Tee reductora de 36\" × 6\"",
+            "Tee reductora de 36\" × 8\"",
+            "Tee reductora de 36\" × 10\"",
+            "Tee reductora de 36\" × 12\"",
+            "Tee reductora de 36\" × 14\"",
+            "Tee reductora de 36\" × 16\"",
+            "Tee reductora de 36\" × 18\"",
+            "Tee reductora de 36\" × 20\"",
+            "Tee reductora de 36\" × 24\"",
+            "Tee reductora de 36\" × 30\""
+        ],
+
+
+        "Cruces rectas": [
+            "Cruz recta de 2\" × 2\"",
+            "Cruz recta de 2 1/2\" × 2 1/2\"",
+            "Cruz recta de 3\" × 3\"",
+            "Cruz recta de 4\" × 4\"",
+            "Cruz recta de 6\" × 6\"",
+            "Cruz recta de 8\" × 8\"",
+            "Cruz recta de 10\" × 10\"",
+            "Cruz recta de 12\" × 12\"",
+            "Cruz recta de 14\" × 14\"",
+            "Cruz recta de 16\" × 16\"",
+            "Cruz recta de 18\" × 18\"",
+            "Cruz recta de 20\" × 20\"",
+            "Cruz recta de 24\" × 24\"",
+            "Cruz recta de 30\" × 30\"",
+            "Cruz recta de 36\" × 36\""
+        ],
+
+
+        "Cruces reductoras": [
+            "Cruz reductora de 2 1/2\" × 2\"",
+            "Cruz reductora de 3\" × 2\"",
+            "Cruz reductora de 3\" × 2 1/2\"",
+            "Cruz reductora de 4\" × 2\"",
+            "Cruz reductora de 4\" × 2 1/2\"",
+            "Cruz reductora de 4\" × 3\"",
+            "Cruz reductora de 6\" × 2\"",
+            "Cruz reductora de 6\" × 2 1/2\"",
+            "Cruz reductora de 6\" × 3\"",
+            "Cruz reductora de 6\" × 4\"",
+            "Cruz reductora de 8\" × 2\"",
+            "Cruz reductora de 8\" × 2 1/2\"",
+            "Cruz reductora de 8\" × 3\"",
+            "Cruz reductora de 8\" × 4\"",
+            "Cruz reductora de 8\" × 6\"",
+            "Cruz reductora de 10\" × 2\"",
+            "Cruz reductora de 10\" × 2 1/2\"",
+            "Cruz reductora de 10\" × 3\"",
+            "Cruz reductora de 10\" × 4\"",
+            "Cruz reductora de 10\" × 6\"",
+            "Cruz reductora de 10\" × 8\"",
+            "Cruz reductora de 12\" × 3\"",
+            "Cruz reductora de 12\" × 4\"",
+            "Cruz reductora de 12\" × 6\"",
+            "Cruz reductora de 12\" × 8\"",
+            "Cruz reductora de 12\" × 10\"",
+            "Cruz reductora de 14\" × 3\"",
+            "Cruz reductora de 14\" × 4\"",
+            "Cruz reductora de 14\" × 6\"",
+            "Cruz reductora de 14\" × 8\"",
+            "Cruz reductora de 14\" × 10\"",
+            "Cruz reductora de 14\" × 12\"",
+            "Cruz reductora de 16\" × 4\"",
+            "Cruz reductora de 16\" × 6\"",
+            "Cruz reductora de 16\" × 8\"",
+            "Cruz reductora de 16\" × 10\"",
+            "Cruz reductora de 16\" × 12\"",
+            "Cruz reductora de 18\" × 14\"",
+            "Cruz reductora de 18\" × 4\"",
+            "Cruz reductora de 18\" × 6\"",
+            "Cruz reductora de 18\" × 8\"",
+            "Cruz reductora de 18\" × 10\"",
+            "Cruz reductora de 18\" × 12\"",
+            "Cruz reductora de 18\" × 16\"",
+            "Cruz reductora de 20\" × 4\"",
+            "Cruz reductora de 20\" × 6\"",
+            "Cruz reductora de 20\" × 8\"",
+            "Cruz reductora de 20\" × 10\"",
+            "Cruz reductora de 20\" × 12\"",
+            "Cruz reductora de 20\" × 14\"",
+            "Cruz reductora de 20\" × 16\"",
+            "Cruz reductora de 20\" × 18\"",
+            "Cruz reductora de 24\" × 4\"",
+            "Cruz reductora de 24\" × 6\"",
+            "Cruz reductora de 24\" × 8\"",
+            "Cruz reductora de 24\" × 10\"",
+            "Cruz reductora de 24\" × 12\"",
+            "Cruz reductora de 24\" × 14\"",
+            "Cruz reductora de 24\" × 16\"",
+            "Cruz reductora de 24\" × 18\"",
+            "Cruz reductora de 24\" × 20\"",
+            "Cruz reductora de 30\" × 4\"",
+            "Cruz reductora de 30\" × 6\"",
+            "Cruz reductora de 30\" × 8\"",
+            "Cruz reductora de 30\" × 10\"",
+            "Cruz reductora de 30\" × 12\"",
+            "Cruz reductora de 30\" × 14\"",
+            "Cruz reductora de 30\" × 16\"",
+            "Cruz reductora de 30\" × 18\"",
+            "Cruz reductora de 30\" × 20\"",
+            "Cruz reductora de 30\" × 24\"",
+            "Cruz reductora de 36\" × 6\"",
+            "Cruz reductora de 36\" × 8\"",
+            "Cruz reductora de 36\" × 10\"",
+            "Cruz reductora de 36\" × 12\"",
+            "Cruz reductora de 36\" × 14\"",
+            "Cruz reductora de 36\" × 16\"",
+            "Cruz reductora de 36\" × 18\"",
+            "Cruz reductora de 36\" × 20\"",
+            "Cruz reductora de 36\" × 24\"",
+            "Cruz reductora de 36\" × 30\""
+        ],
+
+
+        "Reducciones concéntricas": [
+            "Reducción concéntrica de 2 1/2\" × 2\"",
+            "Reducción concéntrica de 3\" × 2\"",
+            "Reducción concéntrica de 3\" × 2 1/2\"",
+            "Reducción concéntrica de 4\" × 2\"",
+            "Reducción concéntrica de 4\" × 2 1/2\"",
+            "Reducción concéntrica de 4\" × 3\"",
+            "Reducción concéntrica de 6\" × 2\"",
+            "Reducción concéntrica de 6\" × 2 1/2\"",
+            "Reducción concéntrica de 6\" × 3\"",
+            "Reducción concéntrica de 6\" × 4\"",
+            "Reducción concéntrica de 8\" × 2\"",
+            "Reducción concéntrica de 8\" × 2 1/2\"",
+            "Reducción concéntrica de 8\" × 3\"",
+            "Reducción concéntrica de 8\" × 4\"",
+            "Reducción concéntrica de 8\" × 6\"",
+            "Reducción concéntrica de 10\" × 3\"",
+            "Reducción concéntrica de 10\" × 4\"",
+            "Reducción concéntrica de 10\" × 6\"",
+            "Reducción concéntrica de 10\" × 8\"",
+            "Reducción concéntrica de 12\" × 3\"",
+            "Reducción concéntrica de 12\" × 4\"",
+            "Reducción concéntrica de 12\" × 6\"",
+            "Reducción concéntrica de 12\" × 8\"",
+            "Reducción concéntrica de 12\" × 10\"",
+            "Reducción concéntrica de 14\" × 4\"",
+            "Reducción concéntrica de 14\" × 6\"",
+            "Reducción concéntrica de 14\" × 8\"",
+            "Reducción concéntrica de 14\" × 10\"",
+            "Reducción concéntrica de 14\" × 12\"",
+            "Reducción concéntrica de 16\" × 4\"",
+            "Reducción concéntrica de 16\" × 6\"",
+            "Reducción concéntrica de 16\" × 8\"",
+            "Reducción concéntrica de 16\" × 10\"",
+            "Reducción concéntrica de 16\" × 12\"",
+            "Reducción concéntrica de 16\" × 14\"",
+            "Reducción concéntrica de 18\" × 4\"",
+            "Reducción concéntrica de 18\" × 6\"",
+            "Reducción concéntrica de 18\" × 8\"",
+            "Reducción concéntrica de 18\" × 10\"",
+            "Reducción concéntrica de 18\" × 12\"",
+            "Reducción concéntrica de 18\" × 14\"",
+            "Reducción concéntrica de 18\" × 16\"",
+            "Reducción concéntrica de 20\" × 4\"",
+            "Reducción concéntrica de 20\" × 6\"",
+            "Reducción concéntrica de 20\" × 8\"",
+            "Reducción concéntrica de 20\" × 10\"",
+            "Reducción concéntrica de 20\" × 12\"",
+            "Reducción concéntrica de 20\" × 14\"",
+            "Reducción concéntrica de 20\" × 16\"",
+            "Reducción concéntrica de 20\" × 18\"",
+            "Reducción concéntrica de 24\" × 4\"",
+            "Reducción concéntrica de 24\" × 6\"",
+            "Reducción concéntrica de 24\" × 8\"",
+            "Reducción concéntrica de 24\" × 10\"",
+            "Reducción concéntrica de 24\" × 12\"",
+            "Reducción concéntrica de 24\" × 14\"",
+            "Reducción concéntrica de 24\" × 16\"",
+            "Reducción concéntrica de 24\" × 18\"",
+            "Reducción concéntrica de 24\" × 20\"",
+            "Reducción concéntrica de 30\" × 8\"",
+            "Reducción concéntrica de 30\" × 10\"",
+            "Reducción concéntrica de 30\" × 12\"",
+            "Reducción concéntrica de 30\" × 14\"",
+            "Reducción concéntrica de 30\" × 16\"",
+            "Reducción concéntrica de 30\" × 18\"",
+            "Reducción concéntrica de 30\" × 20\"",
+            "Reducción concéntrica de 30\" × 24\"",
+            "Reducción concéntrica de 36\" × 18\"",
+            "Reducción concéntrica de 36\" × 20\"",
+            "Reducción concéntrica de 36\" × 24\"",
+            "Reducción concéntrica de 36\" × 30\""
+        ],
+
+
+        "Carretes cortos": [
+            "Carrete corto de 2\"",
+            "Carrete corto de 2 1/2\"",
+            "Carrete corto de 3\"",
+            "Carrete corto de 4\"",
+            "Carrete corto de 6\"",
+            "Carrete corto de 8\"",
+            "Carrete corto de 10\"",
+            "Carrete corto de 12\"",
+            "Carrete corto de 14\"",
+            "Carrete corto de 16\"",
+            "Carrete corto de 18\"",
+            "Carrete corto de 20\"",
+            "Carrete corto de 24\"",
+            "Carrete corto de 30\"",
+            "Carrete corto de 36\""
+        ],
+
+
+        "Carretes largos": [
+            "Carrete largo de 2\"",
+            "Carrete largo de 2 1/2\"",
+            "Carrete largo de 3\"",
+            "Carrete largo de 4\"",
+            "Carrete largo de 6\"",
+            "Carrete largo de 8\"",
+            "Carrete largo de 10\"",
+            "Carrete largo de 12\"",
+            "Carrete largo de 14\"",
+            "Carrete largo de 16\"",
+            "Carrete largo de 18\"",
+            "Carrete largo de 20\"",
+            "Carrete largo de 24\"",
+            "Carrete largo de 30\"",
+            "Carrete largo de 36\""
+        ],
+
+
+        "Extremidades": [
+            "Extremidad de 2\"",
+            "Extremidad de 2 1/2\"",
+            "Extremidad de 3\"",
+            "Extremidad de 4\"",
+            "Extremidad de 6\"",
+            "Extremidad de 8\"",
+            "Extremidad de 10\"",
+            "Extremidad de 12\"",
+            "Extremidad de 14\"",
+            "Extremidad de 16\"",
+            "Extremidad de 18\"",
+            "Extremidad de 20\"",
+            "Extremidad de 24\"",
+            "Extremidad de 30\"",
+            "Extremidad de 36\""
+        ],
+
+
+        "Tapas ciegas": [
+            "Tapa ciega de 2\"",
+            "Tapa ciega de 2 1/2\"",
+            "Tapa ciega de 3\"",
+            "Tapa ciega de 4\"",
+            "Tapa ciega de 6\"",
+            "Tapa ciega de 8\"",
+            "Tapa ciega de 10\"",
+            "Tapa ciega de 12\"",
+            "Tapa ciega de 14\"",
+            "Tapa ciega de 16\"",
+            "Tapa ciega de 18\"",
+            "Tapa ciega de 20\"",
+            "Tapa ciega de 24\"",
+            "Tapa ciega de 30\"",
+            "Tapa ciega de 36\""
+        ],
+
+
+        "Bridas roscadas": [
+            "Brida roscada de 2\"",
+            "Brida roscada de 2 1/2\"",
+            "Brida roscada de 3\"",
+            "Brida roscada de 4\"",
+            "Brida roscada de 6\"",
+            "Brida roscada de 8\"",
+            "Brida roscada de 10\"",
+            "Brida roscada de 12\""
+        ],
+
+
+        "Bridas soldables planas": [
+            "Brida soldable plana de 2\"",
+            "Brida soldable plana de 2 1/2\"",
+            "Brida soldable plana de 3\"",
+            "Brida soldable plana de 4\"",
+            "Brida soldable plana de 6\"",
+            "Brida soldable plana de 8\"",
+            "Brida soldable plana de 10\"",
+            "Brida soldable plana de 12\"",
+            "Brida soldable plana de 14\"",
+            "Brida soldable plana de 16\"",
+            "Brida soldable plana de 18\"",
+            "Brida soldable plana de 20\"",
+            "Brida soldable plana de 24\"",
+            "Brida soldable plana de 30\"",
+            "Brida soldable plana de 36\""
+        ],
+
+
+        "Bridas soldables Slip-On": [
+            "Brida soldable Slip-On de 2\"",
+            "Brida soldable Slip-On de 2 1/2\"",
+            "Brida soldable Slip-On de 3\"",
+            "Brida soldable Slip-On de 4\"",
+            "Brida soldable Slip-On de 6\"",
+            "Brida soldable Slip-On de 8\"",
+            "Brida soldable Slip-On de 10\"",
+            "Brida soldable Slip-On de 12\"",
+            "Brida soldable Slip-On de 14\"",
+            "Brida soldable Slip-On de 16\"",
+            "Brida soldable Slip-On de 18\"",
+            "Brida soldable Slip-On de 20\"",
+            "Brida soldable Slip-On de 24\"",
+            "Brida soldable Slip-On de 30\"",
+            "Brida soldable Slip-On de 36\""
+        ]
+    },
+
+
+    "Válvulas": {
+
+        "Válvula de compuerta vástago fijo": [
+            "Válvula de compuerta vástago fijo Clase 125 de 2\"",
+            "Válvula de compuerta vástago fijo Clase 125 de 2 1/2\"",
+            "Válvula de compuerta vástago fijo Clase 125 de 3\"",
+            "Válvula de compuerta vástago fijo Clase 125 de 4\"",
+            "Válvula de compuerta vástago fijo Clase 125 de 6\"",
+            "Válvula de compuerta vástago fijo Clase 125 de 8\"",
+            "Válvula de compuerta vástago fijo Clase 125 de 10\"",
+            "Válvula de compuerta vástago fijo Clase 125 de 12\"",
+            "Válvula de compuerta vástago fijo Clase 125 de 14\"",
+            "Válvula de compuerta vástago fijo Clase 125 de 16\"",
+            "Válvula de compuerta vástago fijo Clase 125 de 18\"",
+            "Válvula de compuerta vástago fijo Clase 125 de 20\"",
+            "Válvula de compuerta vástago fijo Clase 125 de 24\"",
+            "Válvula de compuerta vástago fijo Clase 125 de 30\"",
+            "Válvula de compuerta vástago fijo Clase 125 de 36\""
+        ]
+    },
+
+
+    "Tornillería": {
+
+        "Tornillos": [
+            "Tornillo cabeza hexagonal con tuerca para brida de 2\"",
+            "Tornillo cabeza hexagonal con tuerca para brida de 2 1/2\"",
+            "Tornillo cabeza hexagonal con tuerca para brida de 3\"",
+            "Tornillo cabeza hexagonal con tuerca para brida de 4\"",
+            "Tornillo cabeza hexagonal con tuerca para brida de 6\"",
+            "Tornillo cabeza hexagonal con tuerca para brida de 8\"",
+            "Tornillo cabeza hexagonal con tuerca para brida de 10\"",
+            "Tornillo cabeza hexagonal con tuerca para brida de 12\"",
+            "Tornillo cabeza hexagonal con tuerca para brida de 14\"",
+            "Tornillo cabeza hexagonal con tuerca para brida de 16\"",
+            "Tornillo cabeza hexagonal con tuerca para brida de 18\"",
+            "Tornillo cabeza hexagonal con tuerca para brida de 20\"",
+            "Tornillo cabeza hexagonal con tuerca para brida de 24\"",
+            "Tornillo cabeza hexagonal con tuerca para brida de 30\"",
+            "Tornillo cabeza hexagonal con tuerca para brida de 36\""
+        ]
+    },
+
+
+    "Tapas, marcos y contramarcos": {
+
+        "Tapas y marcos": [
+            "Tapa circular pesada",
+            "Tapa circular regular",
+            "Tapa circular ligera",
+            "Tapa circular comercial",
+            "Tapa circular pesada ciega",
+            "Tapa circular regular ciega",
+            "Tapa circular ligera ciega",
+            "Tapa circular comercial ciega",
+            "Marco con tapa estándar",
+            "Marco con tapa mediano",
+            "Marco con tapa pesado",
+            "Contramarco de canal sencillo centrado, peralte de 4\"",
+            "Contramarco de canal sencillo centrado, peralte de 6\"",
+            "Contramarco de canal sencillo descentrado, peralte de 4\"",
+            "Contramarco de canal sencillo descentrado, peralte de 6\"",
+            "Contramarco de canal doble, peralte de 4\"",
+            "Contramarco de canal doble, peralte de 6\""
+        ]
+    },
+
+
+    "Rejillas": {
+
+        "Rejillas": [
+            "Rejilla con 1 bisagra de 450 × 450 mm",
+            "Rejilla con 1 bisagra de 500 × 500 mm",
+            "Rejilla con 2 bisagras de 500 × 500 mm",
+            "Rejilla con 2 bisagras de 400 × 600 mm comercial",
+            "Rejilla con 2 bisagras de 400 × 600 mm",
+            "Rejilla con 2 bisagras de 600 × 700 mm comercial",
+            "Rejilla con 2 bisagras de 600 × 700 mm",
+            "Rejilla de piso fija de 450 × 450 mm",
+            "Rejilla de piso fija de 500 × 500 mm",
+            "Rejilla de piso fija de 400 × 600 mm",
+            "Rejilla de piso fija de 600 × 700 mm",
+            "Rejilla pecho de paloma de 580 × 465 mm",
+            "Rejilla curva de 740 × 470 mm",
+            "Rejilla 1321-RG para coladera"
+        ]
+    },
+
+
+    "Pozos, coladeras y accesorios": {
+
+        "Accesorios": [
+            "Boca de tormenta para coladera pluvial",
+            "Escalón para pozo de visita estándar",
+            "Escalón para pozo de visita tipo D.D.F.",
+            "Ensamble Marco, Aro y Tapa 84 sin bisagra",
+            "Ensamble Marco, Aro y Tapa 84 con bisagra",
+            "Tapa 84 sin bisagras para marco y brocal",
+            "Tapa 84 con bisagras para aro y brocal",
+            "Tapa 84 para aro",
+            "Tapa 84-R reforzada para brocal",
+            "Marco 84 con bisagra",
+            "Marco 84 sin bisagra",
+            "Brocal para Tapa 84",
+            "Brocal reforzado para Tapa 84-R",
+            "Aro 84 con bisagra",
+            "Aro 84 sin bisagra",
+            "Caja para llave de banqueta estándar",
+            "Caja para llave de banqueta corta",
+            "Campana para operación de válvulas de 3\" a 6\"",
+            "Campana para operación de válvulas de 8\" a 10\"",
+            "Tapa T1 con Marco M1, ciega",
+            "Tapa T2 con Marco M2, ciega",
+            "Tapa T4 con Marco M4, con rejilla",
+            "Tapa T5 con Marco M5, con rejilla",
+            "Brocal T-3 M-3",
+            "Codo Cespol",
+            "Bola de contrapeso",
+            "Plato quiebra chorro",
+            "Bomba de prueba"
+        ]
+    }
+
+};
+
+
+/* =========================================================
+   FUNCIONES
+========================================================= */
+
+function slugify(text) {
+
+    return text
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+
+}
+
+
+function normalize(text) {
+
+    return text
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/×/g, "x")
+        .trim();
+
+}
+
+
+function createWhatsAppLink(product) {
+
+    const message =
+        `Hola, quiero solicitar una cotización de:\n\n${product}\n\n` +
+        `¿Me pueden proporcionar precio y disponibilidad?`;
+
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+}
+
+
+/* =========================================================
+   NAVEGACIÓN RÁPIDA
+========================================================= */
+
+const quickNav =
+    document.getElementById("quickNav");
+
+
+Object.keys(catalogData).forEach(sectionName => {
+
+    const link =
+        document.createElement("a");
+
+    link.href =
+        `#${slugify(sectionName)}`;
+
+    link.textContent =
+        sectionName;
+
+    quickNav.appendChild(link);
+
+});
+
+
+/* =========================================================
+   CREAR CATÁLOGO AUTOMÁTICAMENTE
+========================================================= */
+
+const catalogContainer =
+    document.getElementById("catalogContainer");
+
+
+function renderCatalog() {
+
+    catalogContainer.innerHTML = "";
+
+
+    Object.entries(catalogData).forEach(
+        ([sectionName, families]) => {
+
+            const section =
+                document.createElement("section");
+
+            section.className =
+                "catalog-section";
+
+            section.id =
+                slugify(sectionName);
+
+
+            const heading =
+                document.createElement("div");
+
+            heading.className =
+                "section-heading";
+
+
+            heading.innerHTML = `
+                <div>
+                    <p class="eyebrow">
+                        ${sectionName.toUpperCase()}
+                    </p>
+
+                    <h2>
+                        ${sectionName}
+                    </h2>
+                </div>
+
+                <a href="#catalogo" class="back-top">
+                    Volver arriba ↑
+                </a>
+            `;
+
+
+            section.appendChild(heading);
+
+
+            Object.entries(families).forEach(
+                ([familyName, products]) => {
+
+                    const family =
+                        document.createElement("section");
+
+                    family.className =
+                        "family-block";
+
+                    family.id =
+                        slugify(
+                            `${sectionName}-${familyName}`
+                        );
+
+
+                    const familyHeader =
+                        document.createElement("div");
+
+                    familyHeader.className =
+                        "family-title-row";
+
+
+                    familyHeader.innerHTML = `
+                        <h3>
+                            ${familyName}
+                        </h3>
+
+                        <span>
+                            ${products.length} productos
+                        </span>
+                    `;
+
+
+                    family.appendChild(
+                        familyHeader
+                    );
+
+
+                    const productList =
+                        document.createElement("div");
+
+                    productList.className =
+                        "product-list";
+
+
+                    products.forEach(product => {
+
+                        const row =
+                            document.createElement("article");
+
+                        row.className =
+                            "product-row";
+
+
+                        row.dataset.search =
+                            normalize(
+                                `${sectionName} ${familyName} ${product}`
+                            );
+
+
+                        const productName =
+                            document.createElement("div");
+
+                        productName.className =
+                            "product-name";
+
+                        productName.textContent =
+                            product;
+
+
+                        const whatsapp =
+                            document.createElement("a");
+
+                        whatsapp.className =
+                            "whatsapp-btn";
+
+                        whatsapp.textContent =
+                            "Cotizar por WhatsApp";
+
+                        whatsapp.href =
+                            createWhatsAppLink(product);
+
+                        whatsapp.target =
+                            "_blank";
+
+                        whatsapp.rel =
+                            "noopener";
+
+
+                        row.appendChild(
+                            productName
+                        );
+
+                        row.appendChild(
+                            whatsapp
+                        );
+
+                        productList.appendChild(
+                            row
+                        );
+
+                    });
+
+
+                    family.appendChild(
+                        productList
+                    );
+
+                    section.appendChild(
+                        family
+                    );
+
+                }
+            );
+
+
+            catalogContainer.appendChild(
+                section
+            );
+
+        }
+    );
+
+}
+
+
+renderCatalog();
+
+
+/* =========================================================
+   BUSCADOR
+========================================================= */
+
+const searchInput =
+    document.getElementById("searchInput");
+
+const clearSearch =
+    document.getElementById("clearSearch");
+
+const resultCount =
+    document.getElementById("resultCount");
+
+const noResults =
+    document.getElementById("noResults");
+
+
+function updateCatalog() {
+
+    const query =
+        normalize(searchInput.value);
+
+
+    const productRows =
+        [...document.querySelectorAll(".product-row")];
+
+    const familyBlocks =
+        [...document.querySelectorAll(".family-block")];
+
+    const catalogSections =
+        [...document.querySelectorAll(".catalog-section")];
+
+
+    let visibleProducts = 0;
+
+
+    productRows.forEach(row => {
+
+        const match =
+            !query ||
+            row.dataset.search.includes(query);
+
+
+        row.hidden =
+            !match;
+
+
+        if (match) {
+
+            visibleProducts++;
+
+        }
+
+    });
+
+
+    familyBlocks.forEach(block => {
+
+        const visibleRows =
+            [...block.querySelectorAll(".product-row")]
+                .some(row => !row.hidden);
+
+
+        block.hidden =
+            !visibleRows;
+
+    });
+
+
+    catalogSections.forEach(section => {
+
+        const visibleFamilies =
+            [...section.querySelectorAll(".family-block")]
+                .some(block => !block.hidden);
+
+
+        section.hidden =
+            !visibleFamilies;
+
+    });
+
+
+    resultCount.textContent =
+        query
+            ? `${visibleProducts} producto${visibleProducts === 1 ? "" : "s"} encontrado${visibleProducts === 1 ? "" : "s"}`
+            : `${productRows.length} productos disponibles`;
+
+
+    noResults.hidden =
+        visibleProducts !== 0;
+
+}
+
+
+searchInput.addEventListener(
+    "input",
+    updateCatalog
+);
+
+
+clearSearch.addEventListener(
+    "click",
+    () => {
+
+        searchInput.value = "";
+
+        searchInput.focus();
+
+        updateCatalog();
+
+    }
+);
+
+
+updateCatalog();
+
+
+/* =========================================================
+   ABRIR SECCIÓN DESDE LA PÁGINA PRINCIPAL
+========================================================= */
+
+window.addEventListener(
+    "load",
+    () => {
+
+        if (!window.location.hash) {
+            return;
+        }
+
+
+        const target =
+            document.querySelector(
+                window.location.hash
+            );
+
+
+        if (target) {
+
+            setTimeout(
+                () => {
+
+                    target.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+
+                },
+                150
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
